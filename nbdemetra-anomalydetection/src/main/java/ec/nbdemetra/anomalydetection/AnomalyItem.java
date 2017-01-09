@@ -38,9 +38,9 @@ public class AnomalyItem {
         Processed("Processed"),
         Invalid("Invalid"),
         NotProcessable("NotProcessable");
-        
+
         Status(String name) {
-            
+
         }
 
         public boolean isProcessed() {
@@ -50,7 +50,7 @@ public class AnomalyItem {
         public boolean isInvalid() {
             return this == Invalid;
         }
-        
+
         public boolean isNotProcessable() {
             return this == NotProcessable;
         }
@@ -140,7 +140,7 @@ public class AnomalyItem {
     public boolean isInvalid() {
         return status_.isInvalid();
     }
-    
+
     public boolean isNotProcessable() {
         return status_.isNotProcessable();
     }
@@ -197,7 +197,7 @@ public class AnomalyItem {
         }
         return builder.toString();
     }
-    
+
     public static Collection createBeanCollection() {
         return new ArrayList<>();
     }
