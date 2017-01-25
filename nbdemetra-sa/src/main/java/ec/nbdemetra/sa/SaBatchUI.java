@@ -27,6 +27,7 @@ import ec.satoolkit.ISaSpecification;
 import ec.satoolkit.tramoseats.TramoSeatsSpecification;
 import ec.satoolkit.x13.X13Specification;
 import ec.tss.TsCollection;
+import ec.tss.TsFactory;
 import static ec.tss.TsFactory.toTsCollection;
 import ec.tss.TsInformationType;
 import ec.tss.datatransfer.TransferableXml;
@@ -40,6 +41,7 @@ import ec.tss.xml.sa.XmlSaProcessing;
 import ec.tstoolkit.algorithm.CompositeResults;
 import ec.tstoolkit.algorithm.ProcQuality;
 import ec.tstoolkit.data.DescriptiveStatistics;
+import ec.tstoolkit.timeseries.simplets.TsData;
 import ec.ui.view.tsprocessing.DefaultProcessingViewer;
 import ec.ui.view.tsprocessing.TsProcessingViewer;
 import ec.util.grid.swing.XTable;
@@ -576,6 +578,21 @@ public class SaBatchUI extends AbstractSaProcessingTopComponent implements Multi
         java.awt.Toolkit.getDefaultToolkit().getSystemClipboard().setContents(transferable, null);
     }
 
+    public void copyComponents(List<String> components) {
+        TsCollection tmp = TsFactory.instance.createTsCollection();
+        for (SaItem item : getSelection()) {
+            components.stream().forEach((comp) -> {
+                TsData tsData = item.process().getData(comp, TsData.class);
+                if (tsData != null) {
+                    tmp.add(TsFactory.instance.createTs("[" + comp + "] " + item.getTs().getName(), null, tsData));
+                }
+            });
+        }
+
+        Transferable transferable = TssTransferSupport.getDefault().fromTsCollection(tmp);
+        java.awt.Toolkit.getDefaultToolkit().getSystemClipboard().setContents(transferable, null);
+    }
+
     public void cut() {
         SaItem[] items = selection;
         if (items == null) {
@@ -999,7 +1016,7 @@ public class SaBatchUI extends AbstractSaProcessingTopComponent implements Multi
             label.setHorizontalAlignment(JLabel.CENTER);
             return label;
         }
-        
+
         @Override
         protected String getText(SaItem item) {
             return null;
